@@ -22,6 +22,7 @@ namespace S26W10CodeFirstApproach
         public MainWindow()
         {
             InitializeComponent();
+            LoadStandardsInCombobox();
         }
 
         private void LoadStudents()
@@ -43,6 +44,24 @@ namespace S26W10CodeFirstApproach
         private void btnLoadStudents_Click(object sender, RoutedEventArgs e)
         {
             LoadStudents();
+        }
+
+        private void btnFind_Click(object sender, RoutedEventArgs e)
+        {
+            int id = int.Parse(txtId.Text);
+            var std = db.Students.Find(id);
+
+            if (std != null)
+            {
+                txtName.Text = std.StudentName;
+                cmbStandard.SelectedValue = std.StandardId;
+            }
+            else
+            {
+                txtName.Text = "";
+                cmbStandard.SelectedIndex = -1;
+                MessageBox.Show("Invalid ID. Please try again");
+            }
         }
     }
 }
