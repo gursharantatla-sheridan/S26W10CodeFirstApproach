@@ -16,9 +16,33 @@ namespace S26W10CodeFirstApproach
     /// </summary>
     public partial class MainWindow : Window
     {
+        // instantiate the context class
+        SchoolContext db = new SchoolContext();
+
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void LoadStudents()
+        {
+            var students = db.Students.Select(s => new { s.StudentId, s.StudentName, s.Standard.StandardName }).ToList();
+
+            grdStudents.ItemsSource = students;
+        }
+
+        private void LoadStandardsInCombobox()
+        {
+            var standards = db.Standards.ToList();
+
+            cmbStandard.ItemsSource = standards;
+            cmbStandard.DisplayMemberPath = "StandardName";
+            cmbStandard.SelectedValuePath = "StandardId";
+        }
+
+        private void btnLoadStudents_Click(object sender, RoutedEventArgs e)
+        {
+            LoadStudents();
         }
     }
 }
