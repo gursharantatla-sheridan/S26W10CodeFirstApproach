@@ -63,5 +63,70 @@ namespace S26W10CodeFirstApproach
                 MessageBox.Show("Invalid ID. Please try again");
             }
         }
+
+        private void btnInsert_Click(object sender, RoutedEventArgs e)
+        {
+            Student std = new Student();
+            std.StudentName = txtName.Text;
+            std.StandardId = (int)cmbStandard.SelectedValue;
+
+            db.Students.Add(std);
+            db.SaveChanges();
+
+            LoadStudents();
+            MessageBox.Show("New student added");
+        }
+
+        private void btnUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            int id = int.Parse(txtId.Text);
+            var std = db.Students.Find(id);
+
+            std.StudentName = txtName.Text;
+            std.StandardId = (int)cmbStandard.SelectedValue;
+
+            db.SaveChanges();
+            LoadStudents();
+            MessageBox.Show("Student updated");
+        }
+
+        private void btnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            int id = int.Parse(txtId.Text);
+            var std = db.Students.Find(id);
+
+            db.Students.Remove(std);
+            db.SaveChanges();
+
+            LoadStudents();
+            MessageBox.Show("Student deleted");
+        }
+
+        private void btnSearch_Click(object sender, RoutedEventArgs e)
+        {
+            // LINQ - Language Integrated Query
+
+            // query syntax
+            //var students = (from s in db.Students
+            //               where s.StudentName!.Contains(txtName.Text)
+            //               select s).ToList();
+
+            // method syntax
+            var students = db.Students.Where(s => s.StudentName!.Contains(txtName.Text)).ToList();
+
+
+            grdStudents.ItemsSource = students;
+        }
+
+        private void cmbStandard_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int stdId = (int)cmbStandard.SelectedValue;
+
+            var students = (from s in db.Students
+                            where s.StandardId == stdId
+                            select s).ToList();
+
+            grdStudents.ItemsSource = students;
+        }
     }
 }
